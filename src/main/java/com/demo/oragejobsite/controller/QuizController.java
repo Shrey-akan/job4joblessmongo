@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.demo.oragejobsite.dao.QuizQuestionRepository;
 import com.demo.oragejobsite.entity.QuizQuestion;
 
+
+
 @RestController
 @CrossOrigin(origins = "https://job4jobless.com")
 public class QuizController {
@@ -49,8 +51,8 @@ public class QuizController {
 	
     @CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/deletequestion")
-	public ResponseEntity<String> deleteQuestionById(@RequestBody Map<String, Long> request) {
-	    Long id = request.get("id");
+	public ResponseEntity<String> deleteQuestionById(@RequestBody Map<String, String> request) {
+	    String id = request.get("id");
 	    if (id != null) {
 	        try {
 	            questionRepository.deleteById(id);

@@ -27,13 +27,12 @@ public class TokenProvider {
     private SecretKey jwtSecret;
 
     public TokenProvider(String jwtSecretValue) {
-        // Initialize the SecretKey from the property value
         jwtSecret = Keys.hmacShaKeyFor(jwtSecretValue.getBytes());
     }
 
    
     public TokenProvider() {
-        // Initialize the SecretKey with a default secret value
+
         this("jjbjhgbkgigcuol6354623g23c4y2t42werfd347637648c472i34723847823x4y378i78378943k4iyh23c4847y6238c4y6i");
     }
     

@@ -24,39 +24,27 @@ public class AnswerValidationController {
 	        this.quizQuestionRepository = quizQuestionRepository;
 	    }
 	    
-	    @CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/checkallanswer")
     public ResponseEntity<Boolean> validateAnswers(@RequestBody List<UserAnswer> userAnswers) {
-        // Assuming you have a list of UserAnswer objects representing each question, user answer, and correct answer
         System.out.println(userAnswers.get(0).getQuestionId());
-        // Implement the logic to compare userAnswers with correct answers
         boolean allCorrect = checkAllAnswers(userAnswers);
-        
-        // Return true if all answers are correct, else false
         return ResponseEntity.ok(allCorrect);
     }
-    
     private boolean checkAllAnswers(List<UserAnswer> userAnswers) {
-    	
     	System.out.println("Received userAnswers: " + userAnswers);
         for (UserAnswer answer : userAnswers) {
-            Long questionId = answer.getQuestionId();
+            String questionId = answer.getQuestionId();
             String userResponse = answer.getUserResponse();
-            // Retrieve the correct answer based on questionId from the database
             String correctAnswer = getCorrectAnswerFromDatabase(questionId);
-
             if (!userResponse.equalsIgnoreCase(correctAnswer)) {
                 return false;
             }
         }
-
         return true;
     }
-
-    private String getCorrectAnswerFromDatabase(Long questionId) {
-        // Fetch the correct answer from the database using the QuizQuestionRepository
-        QuizQuestion quizQuestion = quizQuestionRepository.findById((long) questionId).orElse(null);
-
+    private String getCorrectAnswerFromDatabase(String questionId) {
+        QuizQuestion quizQuestion = quizQuestionRepository.findById((String) questionId).orElse(null);
         return (quizQuestion != null) ? quizQuestion.getCorrectAnswer() : "";
     }
     

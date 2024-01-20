@@ -23,30 +23,16 @@ public class ApplyController {
 	@Autowired
 	private ApplyDao apd;
 
-	
-	
-	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/insertapplyjob")
 	public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
 	    try {
-	    	
-	    	// Generate a random UUID as a string
 	        String randomString = UUID.randomUUID().toString();
-
-	        // Remove hyphens and special symbols
 	        randomString = randomString.replaceAll("-", "");
-
-        // Set the randomUid as the UID for the user
     	 applyjob.setJuid(randomString);
-	        // Check if you need any validation logic here before saving the applyjob
-
-	        // Save the applyjob
 	        ApplyJob savedApplyJob = apd.save(applyjob);
-
 	        return ResponseEntity.status(HttpStatus.CREATED).body(savedApplyJob);
 	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions (e.g., constraint violations)
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
 	    } catch (Exception e) {
@@ -62,49 +48,41 @@ public class ApplyController {
 	@GetMapping("/fetchapplyform")
 	public ResponseEntity<?> fetchapplyform() {
 	    try {
-	        // Fetch all ApplyJob records
 	        List<ApplyJob> applyJobs = apd.findAll();
-
 	        return ResponseEntity.ok(applyJobs);
 	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
 	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
+	
+	
+	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/updateProfileUpdate")
 	public ResponseEntity<?> updateProfileUpdate(@RequestBody ApplyJob applyJob) {
 	    try {
-	        // Retrieve the ApplyJob entity from the database using its UID
 	        ApplyJob existingApplyJob = apd.findByJuid(applyJob.getJuid());
-
 	        if (existingApplyJob != null) {
-	            // Update the profileupdate field with the new value
 	            existingApplyJob.setProfileupdate(applyJob.getProfileupdate());
-
-	            // Save the updated ApplyJob entity
 	            ApplyJob updatedApplyJob = apd.save(existingApplyJob);
-
 	            return ResponseEntity.ok(updatedApplyJob);
 	        } else {
-	            // ApplyJob with the provided UID not found
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ApplyJob not found for UID: " + applyJob.getJuid());
 	        }
 	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions (e.g., constraint violations)
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
 	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
+	
+	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@GetMapping("/fetchapplyformbyjobid")
 	public ResponseEntity<?> fetchApplyFormByJobId(
@@ -112,16 +90,12 @@ public class ApplyController {
 	        @RequestParam(name = "jobid") String jobid
 	) {
 	    try {
-	        // Fetch ApplyJob records based on empid and jobid
 	        List<ApplyJob> applyJobs = apd.findByEmpidAndJobid(empid, jobid);
-
 	        return ResponseEntity.ok(applyJobs);
 	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
 	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }

@@ -10,7 +10,6 @@ public class UserAnswer {
     }
 
    
-
     public UserAnswer(String questionId, String selectedAnswer, String userResponse) {
 		super();
 		this.questionId = questionId;

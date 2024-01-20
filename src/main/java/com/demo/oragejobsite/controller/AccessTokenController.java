@@ -40,7 +40,7 @@ public class AccessTokenController {
 	    private EmployerDao employerDao; 
 	    @Autowired
 	    private RefreshTokenRepository refreshTokenRepository;
-	// Inject the TokenProvider here
+
 	private TokenProvider tokenProvider;
 
 	public AccessTokenController(TokenProvider tokenProvider) {
@@ -52,10 +52,8 @@ public class AccessTokenController {
 	public ResponseEntity<String> checkAccessTokenValidity(@RequestBody Map<String, String> requestMap) {
 	    try {
 	        String accessToken = requestMap.get("accessToken");
-
 	        if (tokenProvider.isAccessTokenValid(accessToken)) {
 	        	return ResponseEntity.ok().body("{\"status\":\"Access token is valid.\"}");
-
 	        } else {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access token is invalid or has expired.");
 	        }
@@ -69,17 +67,14 @@ public class AccessTokenController {
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/refreshToken")
 	public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> requestMap) {
-	    try {
-	       
+	    try { 
 	        String refreshToken = requestMap.get("refreshToken");
 	        System.out.println("Received Refresh Token: " + refreshToken);
-
 	        if (refreshToken == null || refreshToken.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
 	        }
 	        if (tokenProvider.isRefreshTokenValid(refreshToken)) {
 	        	 System.out.println("Received Refresh Token: " + tokenProvider.isRefreshTokenValid(refreshToken));
-
 	        	 String[] userData = tokenProvider.validateAndExtractUsernameAndUidFromRefreshToken(refreshToken);
 	            System.out.println("Received Refresh Token: " + userData);
 	            if (userData != null && userData.length == 2) {
@@ -92,8 +87,7 @@ public class AccessTokenController {
 	            	   System.out.println("Received Refresh Token: " + userOptional);
 	            	   System.out.println("Received Refresh Token: " + employerOptional);
 	            	   System.out.println("Received Refresh Token: " + adminOptional);
-                    if (userOptional.isPresent()) {
-                    	
+                    if (userOptional.isPresent()) {    
                     	User user = userOptional.get();
                         String newAccessToken = tokenProvider.generateAccessToken(user.getUid());
                         System.out.println("Received Refresh Token: " + newAccessToken);
@@ -101,7 +95,6 @@ public class AccessTokenController {
                         responseBody.put("accessToken", newAccessToken);
                         responseBody.put("role", "user");
                         responseBody.put("uid", user.getUid());
-
                         return ResponseEntity.ok(responseBody);
                     } else if (employerOptional.isPresent()) {
                     	Employer employer = employerOptional.get();
@@ -111,10 +104,8 @@ public class AccessTokenController {
                         responseBody.put("accessToken", newAccessToken);
                         responseBody.put("role", "employer");
                         responseBody.put("empid", employer.getEmpid());
-
                         return ResponseEntity.ok(responseBody);
-                    }
-                    
+                    }             
                     else if (adminOptional.isPresent()) {
                         Admin admin = adminOptional.get();
                         String newAccessToken = tokenProvider.generateAccessToken(admin.getAdminId());
@@ -124,14 +115,12 @@ public class AccessTokenController {
                         responseBody.put("role", "admin");
                         responseBody.put("adminid", admin.getAdminId());
                         return ResponseEntity.ok(responseBody);
-//                        return generateAccessTokenResponse(admin.getAdminid(), "admin");
                     }
                 }
 	        }
-
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
 	    } catch (Exception e) {
-	        e.printStackTrace(); // Log the exception for debugging
+	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}

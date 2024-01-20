@@ -27,17 +27,12 @@ public class ContactController {
 	public ResponseEntity<Boolean> insertcontact(@RequestBody Contact contact) {
 	    try {
 	        Contact savedContact = cd.save(contact);
-	        // If saving is successful, return true
 	        return ResponseEntity.status(HttpStatus.CREATED).body(true);
 	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions (e.g., constraint violations)
 	        e.printStackTrace();
-	        // If an error occurs, return false
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
 	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
 	        e.printStackTrace();
-	        // If an error occurs, return false
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
 	    }
 	}

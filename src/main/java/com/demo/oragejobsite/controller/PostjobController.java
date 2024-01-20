@@ -2,7 +2,7 @@ package com.demo.oragejobsite.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -31,27 +31,13 @@ public class PostjobController {
 	@PostMapping("/jobpostinsert")
 	public ResponseEntity<String> jobpostinsert(@RequestBody PostJob pj) {
 	    try {
-	    	 String randomString = UUID.randomUUID().toString();
-
-		        // Remove hyphens and special symbols
-		        randomString = randomString.replaceAll("-", "");
-
-		        // Set the randomString as the Juid for the ApplyJob
-		        pj.setJobid(randomString);
-	    	
-	    	
 	        PostJob savedPostJob = pjd.save(pj);
-	        // If saving is successful, return a success message
 	        return ResponseEntity.status(HttpStatus.CREATED).body("Job post saved successfully");
 	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions (e.g., constraint violations)
 	        e.printStackTrace();
-	        // Return an error message
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
 	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
 	        e.printStackTrace();
-	        // Return an error message
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
@@ -90,13 +76,9 @@ public class PostjobController {
     @PutMapping("/jobpostupdate/{jobid}")
     public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
         try {
-            // Find the existing job post by jobid
             Optional<PostJob> existingJob = pjd.findById(jobid);
-
             if (existingJob.isPresent()) {
                 PostJob currentJob = existingJob.get();
-                
-                // Update the fields of the existing job post with the new values
                 currentJob.setJobtitle(updatedJob.getJobtitle());
                 currentJob.setCompanyforthisjob(updatedJob.getCompanyforthisjob());
                 currentJob.setNumberofopening(updatedJob.getNumberofopening());
@@ -106,42 +88,32 @@ public class PostjobController {
                 currentJob.setPayjob(updatedJob.getPayjob());
                 currentJob.setPayjobsup(updatedJob.getPayjobsup());
                 currentJob.setDescriptiondata(updatedJob.getDescriptiondata());
-
-                // Save the updated job post
                 pjd.save(currentJob);
-
-                // If the update is successful, return a success message
                 return ResponseEntity.status(HttpStatus.OK).body(currentJob);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
             }
         } catch (DataAccessException e) {
-            // Handle database-related exceptions (e.g., constraint violations)
             e.printStackTrace();
-            // Return an error message
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
         } catch (Exception e) {
-            // Handle any other exceptions that may occur
             e.printStackTrace();
-            // Return an error message
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
         }
     }
+	
+	
+	
 	@CrossOrigin(origins = "https://job4jobless.com", methods = { RequestMethod.PUT })
 	@PutMapping("/updateJobStatus/{jobid}")
 	public ResponseEntity<Object> updateJobStatus(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
 	    try {
 	        Optional<PostJob> existingJob = pjd.findById(jobid);
-
 	        if (existingJob.isPresent()) {
 	            PostJob currentJob = existingJob.get();
-
-	            // Update the fields with the new values
 	            currentJob.setUid(updatedJob.getUid());
 	            currentJob.setStatus(true);
-
 	            pjd.save(currentJob);
-
 	            return ResponseEntity.status(HttpStatus.OK).body(currentJob);
 	        } else {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);

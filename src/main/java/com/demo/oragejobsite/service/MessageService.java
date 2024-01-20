@@ -33,7 +33,6 @@ public class MessageService {
         try {
             return messageEntityRepository.findAll();
         } catch (Exception e) {
-            // Log the exception or handle it appropriately
             throw new RuntimeException("Error fetching messages", e);
         }
     }

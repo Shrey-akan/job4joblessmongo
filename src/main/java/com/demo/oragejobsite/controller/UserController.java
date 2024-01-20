@@ -21,17 +21,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import io.jsonwebtoken.security.Keys;
+
 import com.demo.oragejobsite.dao.RefreshTokenRepository;
 import com.demo.oragejobsite.dao.UserDao;
-import com.demo.oragejobsite.entity.Employer;
+
 import com.demo.oragejobsite.entity.RefreshToken;
 import com.demo.oragejobsite.entity.User;
-import com.demo.oragejobsite.util.JwtTokenUtil;
+
 import com.demo.oragejobsite.util.TokenProvider;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,21 +39,20 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
+
 
 @CrossOrigin(origins = "https://job4jobless.com")
 @RestController
 public class UserController {
 
-@Autowired
-private UserDao ud;
-	@Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
-	private final byte[] refreshTokenSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded();
+	@Autowired
+	private UserDao ud;
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private final TokenProvider tokenProvider;
 	private final RefreshTokenRepository refreshTokenRepository;
+	
+		
 	@Autowired
 	public UserController(TokenProvider tokenProvider, RefreshTokenRepository refreshTokenRepository) {
 		this.tokenProvider = tokenProvider;
@@ -77,7 +76,7 @@ private UserDao ud;
         }
     }
 
-
+// Insert User API
 @CrossOrigin(origins = "https://job4jobless.com")
 @PostMapping("/insertusermail")
 public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
@@ -106,7 +105,7 @@ public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
 
 
 
-
+// Fetch User API
 @CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchuser")
 public ResponseEntity<List<User>> fetchuser() {
@@ -122,7 +121,7 @@ public ResponseEntity<List<User>> fetchuser() {
    }
 }
 
-
+// Fetch User By uid
 @CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchuserById/{uid}")
 public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
@@ -142,8 +141,8 @@ public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
     }
 }
 
-
-@CrossOrigin(origins = "https://job4jobless.com")
+	// Update user Profile
+	@CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/updateUser")
     public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
         try {
@@ -202,7 +201,7 @@ public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
 
 
 
-
+// Login API For User
 @CrossOrigin(origins = "https://job4jobless.com")
 @PostMapping("/logincheck")
 public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse response) {
@@ -244,7 +243,7 @@ public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse r
 }
 
 
-
+// login using Google API
 @CrossOrigin(origins = "https://job4jobless.com")
 @PostMapping("/logincheckgmail")
 public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletResponse response) {
@@ -321,7 +320,7 @@ public boolean checkIfEmailExists(String email) {
         return null;
     }
 
-   
+    // Verified User By Email API
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/verifyUser")
     public ResponseEntity<?> verifyUser(@RequestBody Map<String, String> request) {
@@ -350,7 +349,7 @@ public boolean checkIfEmailExists(String email) {
 
 
 
-
+    // Delete User API
     @CrossOrigin(origins = "https://job4jobless.com")
     @DeleteMapping("/deleteUser/{uid}")
     public ResponseEntity<Object> deleteUserByUid(@PathVariable String uid) {
@@ -369,6 +368,9 @@ public boolean checkIfEmailExists(String email) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
         }
     }
+    
+    
+    // Rset Password API if User Knows the OLD Password
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/resetPassword")
     public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, String> request) {
@@ -397,6 +399,9 @@ public boolean checkIfEmailExists(String email) {
         }
     }
    
+    
+    
+    // Reset Password API 
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/resetPasswordUser")
     public ResponseEntity<Boolean> resetPasswordUser(@RequestBody Map<String, String> request) {
@@ -418,7 +423,7 @@ public boolean checkIfEmailExists(String email) {
         }
     }
 
-   
+    //Checking user exit API
     @CrossOrigin(origins = "https://job4jobless.com")
     @GetMapping("/checkuser")
     public ResponseEntity<Object> checkUser(@RequestParam String userName) {
@@ -437,7 +442,7 @@ public boolean checkIfEmailExists(String email) {
         }
     }
 
-
+    // Logout API
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response) {
@@ -463,7 +468,7 @@ public boolean checkIfEmailExists(String email) {
     }
 
     
-
+    // Google Sign-Up API
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/createOrGetUser")
     public ResponseEntity<Map<String, Object>> createOrGetUser(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
@@ -559,7 +564,7 @@ public boolean checkIfEmailExists(String email) {
 
     
 
-
+   // Login API for Flutter Mobile App
 @CrossOrigin(origins = "https://job4jobless.com")
 @PostMapping("/applogin")
 public ResponseEntity<?> applogin(@RequestBody User c12, HttpServletResponse response) {

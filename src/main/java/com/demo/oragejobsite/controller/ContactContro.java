@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.Contactfrontdao;
-import com.demo.oragejobsite.entity.Contact;
+
 import com.demo.oragejobsite.entity.DirectConntact;
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -27,17 +27,12 @@ public class ContactContro {
 	public ResponseEntity<Boolean> insertfrontform(@RequestBody DirectConntact contact) {
 	    try {
 	    	DirectConntact savedContact = contatfront.save(contact);
-	        // If saving is successful, return true
 	        return ResponseEntity.status(HttpStatus.CREATED).body(true);
 	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions (e.g., constraint violations)
 	        e.printStackTrace();
-	        // If an error occurs, return false
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
 	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
 	        e.printStackTrace();
-	        // If an error occurs, return false
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
 	    }
 	}
